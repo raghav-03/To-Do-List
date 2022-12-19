@@ -1,7 +1,6 @@
 // require library
 const express=require('express');
 const path = require('path');
-const port=process.env.PORT || 8000;
 const cookieParser = require('cookie-parser');
 const app=express();
 app.use(express.urlencoded());
@@ -21,9 +20,10 @@ const sassMiddleware =require('node-sass-middleware');
 
 // connecting to veiw engine
 app.set('view engine','ejs');
-app.set('views','./views');
+app.set('views', path.join(__dirname, 'views'));
 //connecting to static assets
-app.use(express.static('assets'));
+app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/assets'));
 app.use(expressLayouts);
 // extract style and scripts from sub pages into the layout
 app.set('layout extractStyles', true);
@@ -61,10 +61,10 @@ app.use(flashmiddleware.setflash);
 // connecting to routes
 app.use('/',require('./routes/index'));
 // fire up the server
-app.listen(port,function(err){
+app.listen(process.env.PORT || 3601,function(err){
     if(err){
         console.log(`Error ${err}`);
         return;
     }
-    console.log(`Running fine on port ${port}`);
+    console.log(`Running fine on port ${process.env.PORT || 3601}`);
 });
